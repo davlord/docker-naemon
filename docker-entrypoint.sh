@@ -2,6 +2,7 @@
 set -e
 
 readonly NAEMON_CONF_DIR=/etc/naemon/conf.d
+readonly THRUK_HTPASSWD=/etc/thruk/htpasswd
 
 
 # define sender email address for exim
@@ -12,6 +13,17 @@ then
 else
     echo "using sender email: $EMAIL_SENDER"
     echo "*@* $EMAIL_SENDER Ffr" > /etc/exim/rewrite.conf
+fi
+
+
+# define naemon web interface login credentials
+if [ -z "$NAEMON_WEB_USER" -o -z "$NAEMON_WEB_PASSWORD" ]
+then
+	echo "using default naemon web interface login credentials"
+	htpasswd -b -c $THRUK_HTPASSWD thrukadmin thrukadmin
+else
+	echo "using custom naemon web interface login credentials"
+	htpasswd -b -c $THRUK_HTPASSWD "$NAEMON_WEB_USER" "$NAEMON_WEB_PASSWORD"
 fi
 
 
