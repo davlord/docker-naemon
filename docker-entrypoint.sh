@@ -20,11 +20,13 @@ fi
 if [ -z "$NAEMON_WEB_USER" -o -z "$NAEMON_WEB_PASSWORD" ]
 then
 	echo "using default naemon web interface login credentials"
-	htpasswd -b -c $THRUK_HTPASSWD thrukadmin thrukadmin
+	NAEMON_WEB_USER=thrukadmin
+	NAEMON_WEB_PASSWORD=thrukadmin
 else
 	echo "using custom naemon web interface login credentials"
-	htpasswd -b -c $THRUK_HTPASSWD "$NAEMON_WEB_USER" "$NAEMON_WEB_PASSWORD"
 fi
+htpasswd -b -c $THRUK_HTPASSWD "$NAEMON_WEB_USER" "$NAEMON_WEB_PASSWORD"
+sed -e "s/=thrukadmin/=$NAEMON_WEB_USER/g" /etc/thruk/cgi.cfg.default > /etc/thruk/cgi.cfg
 
 
 # if naemon config directory is empty copy default configuration files in it
