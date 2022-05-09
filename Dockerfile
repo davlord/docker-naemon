@@ -12,5 +12,7 @@ RUN cp -r /etc/naemon/conf.d /etc/naemon/conf.d.default
 RUN cp  /etc/thruk/cgi.cfg /etc/thruk/cgi.cfg.default
 COPY naemon.ini /etc/supervisord.d/naemon.ini
 COPY docker-entrypoint.sh /
+RUN mkdir /var/log/naemon
+RUN chown naemon /var/log/naemon
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/bin/supervisord"]
